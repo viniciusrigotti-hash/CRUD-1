@@ -1,4 +1,12 @@
 import { db } from "../firebaseConfig.js";
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
-export function listenItems
+export function listenItems(callback){
+    onValue(ref(db, "items"), (snapshot) => {
+        const items = [];
+        snapshot.forEach((child) => {
+            items.push({ id: child.key, text: child.val().text });
+        });
+        callback(items);
+    });
+};
